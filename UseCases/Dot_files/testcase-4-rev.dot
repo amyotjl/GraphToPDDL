@@ -14,14 +14,14 @@ t2 [type=decision, dataItem=v2]
 t3 [type=decision, dataItem=v3]
 
 // Actions
-a0 [cost=10, type=action];
-a1 [cost=10, type=action];
-a2 [cost=10, type=action];
-a3 [cost=10, type=action];
-a7 [cost=10, type=action];
-a4 [cost=10, type=action];
-a5 [cost=75, type=action];
-a6 [cost=20, type=action];
+a0 [cost=10, type=action, burdenCost=0, nonAdherenceCost=0];
+a1 [cost=10, type=action, burdenCost=0, nonAdherenceCost=0];
+a2 [cost=10, type=action, burdenCost=0, nonAdherenceCost=0];
+a3 [cost=10, type=action, burdenCost=0, nonAdherenceCost=0];
+a7 [cost=10, type=action, burdenCost=0, nonAdherenceCost=0];
+a4 [cost=10, type=action, burdenCost=0, nonAdherenceCost=0];
+a5 [cost=75, type=action, burdenCost=0, nonAdherenceCost=0];
+a6 [cost=20, type=action, burdenCost=0, nonAdherenceCost=0];
 
 // Goals
 g1 [type=goal];
