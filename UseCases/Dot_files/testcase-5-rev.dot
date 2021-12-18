@@ -26,7 +26,7 @@ c2 [cost=10, type=action];
 
 // Parallel
 p1 [type=parallel];
-p2 [type=parallel];
+p2 [type=parallel, , parallelEndNode=True];
 
 // Goals
 g1 [type=goal];

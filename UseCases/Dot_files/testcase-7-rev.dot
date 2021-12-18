@@ -30,7 +30,7 @@ f2 [cost=10, type=action];
 
 // Parallel
 p1 [type=parallel];
-p2 [type=parallel];
+p2 [type=parallel, parallelEndNode=True];
 p3 [type=parallel];
 
 // Goals

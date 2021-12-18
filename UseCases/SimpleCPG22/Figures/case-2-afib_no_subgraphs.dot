@@ -1,0 +1,125 @@
+// AFib - uncontrolled hypertension 
+// version 4 (2021.05.14)
+// modified so we can apply all three revisions
+// Patient data:
+// * Special circumstances do not apply to John because he has highly symptomatic AF: SC = yes; [SW: it seems special conditions apply to John]
+// * His is diagnosed with persistent AF and tachycardia (this last is important – see later);
+// * John has cardioversion;
+// * After cardioversion his symptoms improve: SI = yes;
+//  * It is recurring AF: AF recurs = yes
+//  * John should be on anti-arrhythmic therapy
+
+digraph AFIB {
+newrank=true;
+ranksep=0.25;
+node [shape=box, style=filled, fillcolor=deepskyblue, fontname=calibri, fontsize=10];
+edge [fontname=calibri, fontsize=9];
+
+// Context
+c_afib [type=context];
+
+
+// Goals
+g1 [type=goal];
+
+// Duration change to cost due it is not yet implemented
+// Actions
+// a_anticoagulation_1 [label=<Warfarin or DOAC<br/><i>duration: 3 weeks</i>>];
+a_cardioversion [type=action, cost=1];
+a_anticoagulation [type=action, cost=0];
+a_rate_control_1 [type=action, cost=4];
+a_rate_control_maintenance [type=action, cost=0];
+//a_rhytm_control_1 [label=<Dronedarone or flecainide or amiodarone<br/><i>duration: ?</i>>];
+a_rhytm_control_maintenance [type=action, cost=0];
+a_pill_in_a_pocket [type=action, cost=0];
+
+
+// Subgraph not yet implemented
+//subgraph cluster_rate_control_1 {
+//    label="Rate control";
+//    fontname=arial;
+//	fontsize=10;
+//	style=dotted;
+//    a_rate_control_1 [label=<BB or CBB or digoxin<br/><i>duration: 4 weeks</i>>];
+//}
+
+//subgraph cluster_rate_control_maintenance {
+//    label="Rate control (maitenance)";
+//    fontname=arial;
+//	fontsize=10;
+//	style=dotted;
+//    a_rate_control_maintenance [label=<BB or CBB or digoxin (or combination)<br/><i>duration: lifetime</i>>];
+//}
+
+// subgraph cluster_rhytm_control_1 {
+//     label="Rhytm control";
+//     fontname=arial;
+// 	fontsize=10;
+// 	style=dotted;
+//     a_rhytm_control_1 [label=<Dronedarone or flecainide or amiodarone<br/><i>duration: ?</i>>];
+// }
+
+//subgraph cluster_rhythm_control_maitenance {
+//    label="Anti-arrhytmic therapy (maintenance)";
+//    fontname=arial;
+//	fontsize=10;
+//	style=dotted;
+//    a_rhytm_control_maintenance [label=<Dronedarone or flecainide or amiodarone<br/><i>duration: lifetime</i>>];
+//}
+
+// subgraph cluster_rhythm_control {
+//     label="Anti-arrhytmic therapy";
+//     fontname=arial;
+// 	fontsize=10;
+// 	style=dotted;
+//     a_pill_in_a_pocket [label=<Pill-in-a-pocket<br/><i>duration: lifetime</i>>];
+// }
+
+
+// Decisions
+d_special_circumstances [type=decision, dataItem=special_circumstances];
+d_afib_type [type=decision, dataItem=afib_type];
+d_symptom_recurrence [type=decision, dataItem=symptom_recurrence];
+d_symptoms_improve [type=decision, dataItem=symptoms_improve];
+d_symptoms_resolve [type=decision, dataItem=symptoms_resolve];
+d_afib_recurs [type=decision, dataItem=afib_recurs];
+d_tachychardia [type=decision, dataItem=tachychardia];
+
+// Parallel gateways
+p1 [type=parallel];
+p2 [type=parallel];
+p_end [type=parallel, parallelEndNode=True];
+
+// Ranges for yes/no No [0-5] / Yes [6-10]
+// Arcs
+c_afib -> p1 -> d_special_circumstances;
+d_special_circumstances -> a_rate_control_1 [range=0..5]; //[label="no"];
+// d_special_circumstances -> a_rhytm_control_1 [range=6..10]; //[label="yes"];
+d_special_circumstances -> d_afib_type [range=6..10]; //[label="yes"];
+// a_rhytm_control_1 -> d_afib_type;
+d_afib_type -> d_symptom_recurrence [range=0..5]; //[label="paroxysmal"];
+d_afib_type -> a_cardioversion [range=6..10]; //[label="persistent"];
+a_rate_control_1  -> d_symptoms_resolve;
+p1 -> a_anticoagulation -> p_end;
+// d_symptoms_resolve -> a_rhytm_control_1 [range=0..5]; //[label="no"];
+d_symptoms_resolve -> d_afib_type [range=0..5]; //[label="no"];
+d_symptoms_resolve -> a_rate_control_maintenance [range=6..10]; //[label="yes"];
+a_cardioversion -> d_symptoms_improve;
+d_symptoms_improve -> a_rate_control_maintenance [range=0..5]; //[label="no"];
+d_symptoms_improve -> p2 [range=6..10]; //[label="yes"];
+
+p2 -> {d_tachychardia, d_afib_recurs};
+d_tachychardia -> a_rate_control_maintenance [range=6..10]; //[label=<yes>];
+d_tachychardia -> p_end [range=0..5]; //[label=<no>];
+d_afib_recurs -> a_rhytm_control_maintenance [range=6..10]; //[label=<yes>];
+d_afib_recurs -> p_end [range=0..5]; //[label="no"];
+
+d_symptom_recurrence -> a_pill_in_a_pocket [range=0..5]; //[label="no"];
+d_symptom_recurrence -> a_rhytm_control_maintenance [range=6..10]; //[label="yes"];
+
+{a_rate_control_maintenance, a_rhytm_control_maintenance, a_pill_in_a_pocket} -> p_end;
+
+// a goal is needed
+p_end -> g1;
+// { rank=same; a_rhytm_control_maintenance, a_rate_control_maintenance };
+}

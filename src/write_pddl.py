@@ -278,7 +278,9 @@ def write_not_previous_node(graph, file):
     for node in init_nodes:
         to_node = list(graph.out_edges(node))[0][1]
         to_node_type = graph.nodes[to_node][TYPE_ATTR]
-        file.write("\t(noPrevious{} {})\n".format(to_node_type.capitalize(), node))
+        # noPreviousParallel fix
+        if to_node_type != PARALLEL_NODE:
+            file.write("\t(noPrevious{} {})\n".format(to_node_type.capitalize(), node))
 
 
 def write_goal(graph, file):
