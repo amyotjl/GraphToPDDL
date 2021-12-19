@@ -1,4 +1,3 @@
-This is a placeholder for now
 # GraphToPDDL Documentation
 All the code documentation can be access from the [index.html](https://amyotjl.github.io/GraphToPDDL/src/index.html)
 
