@@ -1,9 +1,9 @@
 {
     "special_circumstances": 7,
     "afib_type": 7,
-    "symptom_recurrence": 3,
+    "symptom_recurrence": 7,
     "symptoms_improve": 7,
-    "symptoms_resolve": 3,
-    "afib_recurs": 7,
-    "tachychardia": 7
+    "symptoms_resolve": 7,
+    "afib_recurs": 9,
+    "tachychardia": 9
 }

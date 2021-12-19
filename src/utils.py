@@ -126,8 +126,8 @@ def get_number_parallel_paths(graph):
     p_end = []
     n_path_found = {}
     for node, attributes in graph.nodes.items():
-        if find_init_node(graph, node) not in n_path_found:
-            n_path_found[find_init_node(graph, node)] = 0
+        # if find_init_node(graph, node) not in n_path_found:
+        #     n_path_found[find_init_node(graph, node)] = 0
         if attributes.get(PARALLEL_START_ATTR) == True:
             # print(node)
             p_start.append(node)
@@ -141,21 +141,27 @@ def get_number_parallel_paths(graph):
     # print(n_path_found)
     for start in p_start:
         for end in p_end:
-            if start != "" and end != "":
-                # print("==========")
-                # print(start)
-                # print(end)
-                parallel_sequence = list(
-                    nwx.all_simple_paths(graph, source=start, target=end)
-                )
-                n_paths = len(parallel_sequence)
-                context = find_init_node(graph, start)
-                # print(parallel_sequence)
-                # print(n_paths)
-                # print(context)
-                n_path_found[context] = n_paths + n_path_found.get(context, 0)
+            
+            # print("==========")
+            # print(start)
+            # print(end)
+            parallel_sequence = list(
+                nwx.all_simple_paths(graph, source=start, target=end)
+            )
+            n_paths = len(parallel_sequence)
+            context = find_init_node(graph, start)
+            # print(parallel_sequence)
+            # print(n_paths)
+            # print(context)
+            # {'P1': {'D1': 2}}
+
+            # For CPG16
+            # n_path_found[context] = n_paths + n_path_found.get(context, 0)
+
+            # For CPG22, end nodes is used
+            n_path_found[end] = n_paths  + n_path_found.get(end, 0) #{context: n_paths + n_path_found.get(start, 0)}
                 
-    # print(n_path_found)
+    #print(n_path_found)
     return n_path_found
 
 
@@ -194,6 +200,8 @@ def find_parallel_path(graph, p_nodes_found):
                     else:
                         parallelTypeNode = ""
                         untraversedParallelNode = ""
+                        # For CPG22
+                        sameParallelBlockNodes = ""
                         
                         
                         parallelNode += "(parallelStartNode {})\n\t".format(start_node)
@@ -231,8 +239,14 @@ def find_parallel_path(graph, p_nodes_found):
                                 untraversedParallelNode += "(untraversedParallelNode {})\n\t".format(p_nodes)
                         untraversedParallelNode += "(untraversedParallelNode {})\n\t".format(end_node)
                         
+
+                        # For CPG22
+                        # sameParallelBlockNodes predicates (sameParallelBlockNodes p1 p2)
+                        sameParallelBlockNodes += "(sameParallelBlockNodes {} {})\n\t".format(start_node,end_node)
+
                         parallelNode += parallelTypeNode
                         parallelNode += untraversedParallelNode
+                        parallelNode += sameParallelBlockNodes
 
                     
 

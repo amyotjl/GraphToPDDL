@@ -14,15 +14,15 @@ t2 [type=decision, dataItem=v2]
 t3 [type=decision, dataItem=v3]
 
 // Actions
-a1 [cost=10, type=action];
-a2 [cost=10, type=action];
-a3 [cost=10, type=action];
-a7 [cost=10, type=action];
-a4 [cost=10, type=action];
-b1 [cost=10, type=action];
-b2 [cost=10, type=action];
-c1 [cost=10, type=action];
-c2 [cost=10, type=action];
+a1 [cost=10, type=action, burdenCost=0, nonAdherenceCost=0];
+a2 [cost=10, type=action, burdenCost=0, nonAdherenceCost=0];
+a3 [cost=10, type=action, burdenCost=0, nonAdherenceCost=0];
+a7 [cost=10, type=action, burdenCost=0, nonAdherenceCost=0];
+a4 [cost=10, type=action, burdenCost=0, nonAdherenceCost=0];
+b1 [cost=10, type=action, burdenCost=0, nonAdherenceCost=0];
+b2 [cost=10, type=action, burdenCost=0, nonAdherenceCost=0];
+c1 [cost=10, type=action, burdenCost=0, nonAdherenceCost=0];
+c2 [cost=10, type=action, burdenCost=0, nonAdherenceCost=0];
 
 // Parallel
 p1 [type=parallel];

@@ -165,11 +165,7 @@ def write_predecessors_and_node_type(graph, file):
         if attributes.get(IS_ORIGINAL_ATTR) == False:
             revisionAction.append("\t(revisionAction {})\n".format(name))
 
-    # Parallel nodes processing
-    parallel_node = find_parallel_path(graph, parallel_node_found)
 
-    file.write("\n\t")
-    file.write("".join(parallel_node))
     file.write("\n")
     file.write("".join(predecessor))
     file.write("\n")
@@ -177,21 +173,29 @@ def write_predecessors_and_node_type(graph, file):
     file.write("\n")
     file.write("".join(original_node))
 
-    # revisionAction
-    file.write("\n")
-    file.write("".join(revisionAction))
+    
+    # Parallel nodes processing
+    parallel_node = find_parallel_path(graph, parallel_node_found)
+
+    file.write("\n\t")
+    file.write("".join(parallel_node))
 
     # number of parallel paths
     n_path_found = get_number_parallel_paths(graph)
     if parallel_node_found:
         [
-            file.write("".join(f"\n\t(= (parallelPathCount {init_node}) 0)"))
+            file.write("".join(f"\n\t(= (parallelPathCount {init_node} {find_init_node(graph,init_node)}) 0)"))
             for init_node, n_paths in n_path_found.items()
         ]
         [
-            file.write("".join(f"\n\t(= (numParallelPaths {init_node}) {n_paths})"))
+            file.write("".join(f"\n\t(= (numParallelPaths {init_node} {find_init_node(graph,init_node)}) {n_paths})"))
             for init_node, n_paths in n_path_found.items()
         ]
+    file.write("\n\t")
+    
+    # revisionAction
+    file.write("\n")
+    file.write("".join(revisionAction))
 
 
 def write_total_metrics(graph, file):
